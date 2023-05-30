@@ -3,6 +3,7 @@ package etcd
 import (
 	"context"
 	"github.com/gotechbook/pkg/endpoint"
+	"go.etcd.io/etcd/client/v3"
 	"time"
 )
 
