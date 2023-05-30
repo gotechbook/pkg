@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gotechbook/pkg/endpoint"
+	"go.etcd.io/etcd/client/v3"
 	"math/rand"
 	"time"
 )
@@ -44,7 +45,10 @@ func (r *Registry) Register(ctx context.Context, service *endpoint.Instance) err
 		return err
 	}
 	if r.lease != nil {
-		r.lease.Close()
+		err := r.lease.Close()
+		if err != nil {
+			return err
+		}
 	}
 	r.lease = clientv3.NewLease(r.client)
 	leaseID, err := r.registerWithKV(ctx, key, string(value))
@@ -58,7 +62,10 @@ func (r *Registry) Register(ctx context.Context, service *endpoint.Instance) err
 func (r *Registry) Deregister(ctx context.Context, service *endpoint.Instance) error {
 	defer func() {
 		if r.lease != nil {
-			r.lease.Close()
+			err := r.lease.Close()
+			if err != nil {
+				return
+			}
 		}
 	}()
 	key := fmt.Sprintf("%s/%s/%s", r.opts.namespace, service.Name, service.ID)

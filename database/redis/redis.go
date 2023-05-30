@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"github.com/gotechbook/pkg/logger"
 	"github.com/redis/go-redis/v9"
 	"time"
 )

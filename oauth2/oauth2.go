@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/gotechbook/pkg/utils"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
