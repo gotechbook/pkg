@@ -15,6 +15,7 @@ require (
 	golang.org/x/sync v0.2.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230526203410-71b5a4ffd15e
 	google.golang.org/grpc v1.55.0
+	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
 )
