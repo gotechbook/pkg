@@ -19,8 +19,6 @@ var _ Config = (*config)(nil)
 var (
 	// ErrNotFound is key not found.
 	ErrNotFound = errors.New("key not found")
-	// ErrTypeAssert is type assert error.
-	ErrTypeAssert = errors.New("type assert error")
 )
 
 // Observer is config observer.

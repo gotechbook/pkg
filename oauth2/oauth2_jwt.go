@@ -11,11 +11,6 @@ import (
 	"time"
 )
 
-const (
-	PrivateKeyFile = "./doc/certs/auth.key"
-	PublicKeyFile  = "./doc/certs/auth.pub"
-)
-
 type Claims struct {
 	jwt.RegisteredClaims
 }

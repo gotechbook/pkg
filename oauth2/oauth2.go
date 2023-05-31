@@ -40,10 +40,10 @@ func (u *UserToken) Marshal() ([]byte, error) {
 func (u *UserToken) Unmarshal(b []byte) error {
 	return json.Unmarshal(b, u)
 }
-func ParseToken(token string) (*UserToken, error) {
+func ParseToken(token string, publicKeyFile string) (*UserToken, error) {
 	claims := Claims{}
 	if parse, err := jwt.ParseWithClaims(token, &claims, func(token *jwt.Token) (any, error) {
-		b, err := utils.ReadFile(PublicKeyFile)
+		b, err := utils.ReadFile(publicKeyFile)
 		if err != nil {
 			return nil, err
 		}
