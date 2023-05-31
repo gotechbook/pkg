@@ -13,7 +13,7 @@ import (
 const headerAuthorize = "authorization"
 const expectedScheme = "bearer"
 
-func AuthorizationUnaryInterceptor(skipURLs ...string) grpc.UnaryServerInterceptor {
+func AuthorizationUnaryInterceptor(puk string, skipURLs ...string) grpc.UnaryServerInterceptor {
 	skipURLsCache := makeSkipURLsCache(skipURLs)
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 		if _, ok := skipURLsCache[info.FullMethod]; ok {
@@ -32,7 +32,7 @@ func AuthorizationUnaryInterceptor(skipURLs ...string) grpc.UnaryServerIntercept
 			return "", status.Errorf(codes.Unauthenticated, "Request unauthenticated with bearer")
 		}
 
-		token, err := oauth2.ParseToken(splits[1])
+		token, err := oauth2.ParseToken(splits[1], puk)
 		if err != nil {
 			return nil, err
 		}
@@ -42,7 +42,7 @@ func AuthorizationUnaryInterceptor(skipURLs ...string) grpc.UnaryServerIntercept
 		return handler(ctx, req)
 	}
 }
-func AuthorizationStreamInterceptor() grpc.StreamServerInterceptor {
+func AuthorizationStreamInterceptor(puk string) grpc.StreamServerInterceptor {
 	return func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		val := ExtractIncoming(ss.Context()).Get(headerAuthorize)
 		if val[0] == "" {
@@ -55,7 +55,7 @@ func AuthorizationStreamInterceptor() grpc.StreamServerInterceptor {
 		if !strings.EqualFold(splits[0], expectedScheme) {
 			return status.Errorf(codes.Unauthenticated, "Request unauthenticated with bearer")
 		}
-		token, err := oauth2.ParseToken(splits[1])
+		token, err := oauth2.ParseToken(splits[1], puk)
 		if err != nil {
 			return err
 		}
